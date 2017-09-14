@@ -11,8 +11,8 @@ file = "A-test10.jpg"
 #   img = "image-?" + img + "-?" + file
 #   print (img)
 
-ip = "10.1.1.207"
-port = 6781
+ip = "52.168.142.91"
+port = 5679
 message = "Hello, Server"
 
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

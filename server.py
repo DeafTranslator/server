@@ -3,11 +3,12 @@ import socket
 import base64
 import numpy as np
 from PIL import Image
-from 
+import cv2 # NEW
+# from 
 # import matplotlib.pyplot as plt
 # import matplotlib.image as mpimg
 
-ipServer = "10.0.0.10"
+ipServer = "192.168.43.26"
 portServer = 6789
 
 
@@ -66,7 +67,7 @@ while True:
 
   # print(data1.shape)
 
-  image = write_png(data, 400, 400)
+  # image = write_png(data, 400, 400)
   # with open("my_image.png", 'wb') as fd:
   #     fd.write(data)
   # Decoding
@@ -76,20 +77,36 @@ while True:
   # String to array
   # receivedImage = np.Array(image, dtype = np.uint8)
   image1 = np.frombuffer(data1, dtype = np.uint8)
-  print(image1.shape)
-  # Reshape array
+  print("image from buffer", image1.shape)
+  newImage = cv2.imdecode(image1, cv2.IMREAD_COLOR) #NEW
+  print("image imdcode", newImage.shape)
+  # Resize image
   # receivedImage = receivedImage.reshape(400,400, 3)
-
+  newImage = cv2.resize(newImage, (224,224), interpolation = cv2.INTER_CUBIC)
+  print("image resize", newImage.shape)
+  
   # fh = open("./try/try.png", "wb")
   # fh.write(data1)
   # fh.close()
-  model.test(image1)
+  
+  ###################################################################
+  # voy a duplicar esta parte
+  ###################################################################
+  # Original
+  # model.test(image1)
   # print(data)
-  if(data1):
+  # if(data1):
     # image = mpimg.imread('./try.png')
     # plt.imshow(image)
     # plt.show()
-    print("message", data1)
+    # print("message", data1)
     # clientSocket.sendto(model.testImage(receivedImage).encode(), (addr))
+    # print('okk')
+  
+  # Modificacion
+
+  if(data1):
+    print("message", newImage)
+    clientSocket.sendto(model.test(newImage).encode(), (addr))
     print('okk')
 

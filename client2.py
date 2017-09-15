@@ -4,7 +4,7 @@ import sys
 # Create a UDP socket
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-server_address = ('35.193.118.178', 10000)
+server_address = ('162.243.173.162', 5679)
 message = 'This is the message.  It will be repeated.'
 
 try:

@@ -11,7 +11,7 @@ file = "A-test10.jpg"
 #   img = "image-?" + img + "-?" + file
 #   print (img)
 
-ip = "52.168.142.91"
+ip = "35.193.118.178"
 port = 5679
 message = "Hello, Server"
 

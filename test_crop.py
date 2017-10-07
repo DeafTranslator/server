@@ -51,7 +51,6 @@ def readVideo(video, fld):
         rotated = rotate_bound(frame, 90)
 
         frame = cv2.cvtColor(rotated, cv2.COLOR_BGR2GRAY)
-        # cv2.imshow("canny", cv2.Canny(frame, 127, 255))
         out = crop.editImg(frame)
         cv2.imshow("out", out)
 
@@ -72,7 +71,6 @@ def readFolder():
         for fl in files:
             frame = cv2.imread(fl)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            # cv2.imshow("canny", cv2.Canny(frame, 127, 255))
             out = crop.editImg(frame)
             cv2.imshow("out", out)
             cv2.waitKey(0)

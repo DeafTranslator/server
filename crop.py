@@ -73,6 +73,6 @@ def editImg(img):
 
     newImg = mergeImage(merge, WIDTH, HEIGHT)
 
-    # classified = model.test(newImg)
+    classified = model.test(newImg)
     
-    return newImg
+    return classified

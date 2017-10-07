@@ -4,11 +4,11 @@ import glob
 import numpy as np
 import crop
 
-train_path = 'C:\\Users\\Juan Graciano\\Desktop\\New folder\\jesu'
+train_path = 'C:\\Users\\Juan Graciano\\Desktop\\Imagenes\\Nati videos\\cropTape'
 
 classesAlph = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 classesNum = ['0','1','2','3','4','5','6','7','8','9']
-classes = ['g']
+classes = classesNum
 
 frame = None
 
@@ -67,9 +67,14 @@ def readFolder():
     for fld in classes:   # assuming data directory has a separate folder for each class, and that each folder is named after the class
         index = classes.index(fld)
         print('Loading {} files (Index: {})'.format(fld, index))
-        path = os.path.join(train_path, fld,'*mp4')
+        path = os.path.join(train_path, fld,'*g')
         files = glob.glob(path)
         for fl in files:
-            readVideo(fl, fld)
+            frame = cv2.imread(fl)
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            # cv2.imshow("canny", cv2.Canny(frame, 127, 255))
+            out = crop.editImg(frame)
+            cv2.imshow("out", out)
+            cv2.waitKey(0)
 
 readFolder()

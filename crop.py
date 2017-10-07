@@ -5,15 +5,12 @@ import numpy as np
 WIDTH = 334
 HEIGHT = 334
 
-def drawContour(frame):
+def cropHand(frame):
         # grey = cv2.cvtColor(frame.copy(), cv2.COLOR_BGR2GRAY)
         value = (15, 15)
         blurred = cv2.GaussianBlur(frame, value, 0)
         _, thresh1 = cv2.threshold(blurred,50,255, cv2.THRESH_BINARY)
         image, contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-
-        cv2.imshow("gg", thresh1)
-        cv2.waitKey(0)
 
         height, width = frame.shape
         min_x, min_y = width, height
@@ -32,9 +29,8 @@ def drawContour(frame):
                 if y+h + bMax >= frame.shape[0] and x+w + bMax >= frame.shape[1]:
                     bMax = 0
                 hand = frame[int(y-bMin):int(y+h+bMax), int(x-bMin):int(x+w+bMax)]
-                cv2.imshow("t", hand)
-                cv2.waitKey(0)
-
+                break
+                
         return hand
 
 def mergeImage(frame, width, height):
@@ -52,8 +48,8 @@ def mergeImage(frame, width, height):
         print("Change x", frame.shape)
     
     # Mask
-    merge = np.zeros((int(width), int(height), 3))
-    
+    merge = np.zeros((int(width), int(height)))
+
     # White mask
     merge.fill(255)
     
@@ -68,17 +64,15 @@ def mergeImage(frame, width, height):
 
     return merge
 
-def makeCanny_WB(frame, imgCanny):
-    imgWB = cv2.threshold(frame,58,255,cv2.THRESH_BINARY)
-    out = imgWB[1] + imgCanny
-    return out
-
 def editImg(img):
-    imgCanny = cv2.Canny(img.copy(), 80, 255)
-    frame = drawContour(img.copy())
-    frame = mergeImage(frame, WIDTH, HEIGHT)
-    outFrame = makeCanny_WB(frame, imgCanny)
+    frame = cropHand(img.copy())
 
-    # classified = model.test(outFrame)
+    imgCanny = cv2.Canny(frame.copy(), 80, 255)
+    imgWB = cv2.threshold(frame,58,255,cv2.THRESH_BINARY_INV)
+    merge = imgWB[1] + imgCanny
+
+    newImg = mergeImage(merge, WIDTH, HEIGHT)
+
+    # classified = model.test(newImg)
     
-    return outFrame
+    return newImg

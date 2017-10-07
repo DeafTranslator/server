@@ -1,6 +1,9 @@
 import cv2
 import numpy as np
 
+WIDTH = 334
+HEIGHT = 334
+
 def drawContour(frame):
         # grey = cv2.cvtColor(frame.copy(), cv2.COLOR_BGR2GRAY)
         value = (15, 15)
@@ -26,7 +29,6 @@ def drawContour(frame):
                     bMax = 0
                 hand = frame[int(y-bMin):int(y+h+bMax), int(x-bMin):int(x+w+bMax)]
              	
-                # cv2.imshow("hand", hand)
 
         return hand
 
@@ -66,3 +68,12 @@ def makeCanny_WB(frame, imgCanny):
     out = imgWB[1] + imgCanny
     return out
 
+def editImg(img):
+    imgCanny = cv2.Canny(img.copy(), 80, 255)
+    frame = drawContour(img.copy())
+    frame = mergeImage(frame, WIDTH, HEIGHT)
+    outFrame = makeCanny_WB(frame, imgCanny)
+
+    anything = 
+    
+    return anything

@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+# import restoreModel as model
 
 WIDTH = 334
 HEIGHT = 334
@@ -11,12 +12,15 @@ def drawContour(frame):
         _, thresh1 = cv2.threshold(blurred,50,255, cv2.THRESH_BINARY)
         image, contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-        height, width, _ = frame.shape
+        cv2.imshow("gg", thresh1)
+        cv2.waitKey(0)
+
+        height, width = frame.shape
         min_x, min_y = width, height
         max_x = max_y = 0
 
         # computes the bounding box for the contour, and draws it on the frame,
-        hand
+        hand = []
         for contour in contours:
             (x,y,w,h) = cv2.boundingRect(contour)
             min_x, max_x = min(x, min_x), max(x+w, max_x)
@@ -28,7 +32,8 @@ def drawContour(frame):
                 if y+h + bMax >= frame.shape[0] and x+w + bMax >= frame.shape[1]:
                     bMax = 0
                 hand = frame[int(y-bMin):int(y+h+bMax), int(x-bMin):int(x+w+bMax)]
-             	
+                cv2.imshow("t", hand)
+                cv2.waitKey(0)
 
         return hand
 
@@ -74,6 +79,6 @@ def editImg(img):
     frame = mergeImage(frame, WIDTH, HEIGHT)
     outFrame = makeCanny_WB(frame, imgCanny)
 
-    anything = 
+    # classified = model.test(outFrame)
     
-    return anything
+    return outFrame

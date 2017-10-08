@@ -70,6 +70,7 @@ def readFolder():
         files = glob.glob(path)
         for fl in files:
             frame = cv2.imread(fl)
+            
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             out = crop.editImg(frame)
             cv2.imshow("out", out)

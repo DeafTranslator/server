@@ -11,7 +11,6 @@ def cropHand(frame):
         blurred = cv2.GaussianBlur(frame, value, 0)
         _, thresh1 = cv2.threshold(blurred,50,255, cv2.THRESH_BINARY)
         image, contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-
         height, width = frame.shape
         min_x, min_y = width, height
         max_x = max_y = 0
@@ -33,14 +32,19 @@ def cropHand(frame):
                 
         return hand
 
+def changeHeight(frame, height):
+    # Adjusting size
+    if frame.shape[0] is not height:
+        hy = height / frame.shape[0]
+        hx = frame.shape[1] * (hy)
+        frame = cv2.resize(frame, (int(hx), int(height)), interpolation = cv2.INTER_CUBIC)
+        print("Change y", frame.shape)
+
+    return frame
+
 def mergeImage(frame, width, height):
  
     # Adjusting size
-    if frame.shape[0] > height:
-        hy = height/frame.shape[0]
-        hx = frame.shape[1]*hy
-        frame = cv2.resize(frame, (int(hx), int(height)), interpolation = cv2.INTER_CUBIC)
-        print("Change y", frame.shape)
     if frame.shape[1] > width:
         hx = width/frame.shape[1]
         hy = frame.shape[0]*hx
@@ -65,7 +69,14 @@ def mergeImage(frame, width, height):
     return merge
 
 def editImg(img):
+    # Mask
+    merge = np.zeros((int(WIDTH), int(HEIGHT)))
+    # White mask
+    merge.fill(255)
+    # print(merge.shape)
     frame = cropHand(img.copy())
+
+    frame = changeHeight(frame, HEIGHT)
 
     imgCanny = cv2.Canny(frame.copy(), 80, 255)
     imgWB = cv2.threshold(frame,58,255,cv2.THRESH_BINARY_INV)
@@ -73,6 +84,6 @@ def editImg(img):
 
     newImg = mergeImage(merge, WIDTH, HEIGHT)
 
-    classified = model.test(newImg)
+    # classified = model.test(newImg)
     
-    return classified
+    return newImg

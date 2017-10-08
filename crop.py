@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import restoreModel as model
+import restoreModel as model
 
 WIDTH = 334
 HEIGHT = 334
@@ -77,7 +77,7 @@ def editImg(img):
     # Crop hand
     frame = cropHand(img.copy(), mean)
 
-    if len(frame1) > 0:
+    if len(frame) > 0:
         # Set height
         frame = changeHeight(frame, HEIGHT)
         # Merge images

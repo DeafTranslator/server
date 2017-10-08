@@ -5,11 +5,11 @@ import numpy as np
 WIDTH = 334
 HEIGHT = 334
 
-def cropHand(frame):
+def cropHand(frame, mean):
         # grey = cv2.cvtColor(frame.copy(), cv2.COLOR_BGR2GRAY)
         value = (15, 15)
         blurred = cv2.GaussianBlur(frame, value, 0)
-        _, thresh1 = cv2.threshold(blurred,50,255, cv2.THRESH_BINARY)
+        _, thresh1 = cv2.threshold(blurred,int(mean),255, cv2.THRESH_BINARY)
         image, contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         height, width = frame.shape
         min_x, min_y = width, height
@@ -38,7 +38,6 @@ def changeHeight(frame, height):
         hy = height / frame.shape[0]
         hx = frame.shape[1] * (hy)
         frame = cv2.resize(frame, (int(hx), int(height)), interpolation = cv2.INTER_CUBIC)
-        print("Change y", frame.shape)
 
     return frame
 
@@ -49,7 +48,6 @@ def mergeImage(frame, width, height):
         hx = width/frame.shape[1]
         hy = frame.shape[0]*hx
         frame = cv2.resize(frame, (int(width), int(hy)), interpolation = cv2.INTER_CUBIC)
-        print("Change x", frame.shape)
     
     # Mask
     merge = np.zeros((int(width), int(height)))
@@ -69,21 +67,30 @@ def mergeImage(frame, width, height):
     return merge
 
 def editImg(img):
-    # Mask
-    merge = np.zeros((int(WIDTH), int(HEIGHT)))
-    # White mask
-    merge.fill(255)
-    # print(merge.shape)
-    frame = cropHand(img.copy())
+    # Average gray color
+    median = img.copy()
+    median = median.reshape(-1)
+    mean = np.average(median)
+    mean *= 1.33
 
-    frame = changeHeight(frame, HEIGHT)
+    frame = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Crop hand
+    frame = cropHand(img.copy(), mean)
 
-    imgCanny = cv2.Canny(frame.copy(), 80, 255)
-    imgWB = cv2.threshold(frame,58,255,cv2.THRESH_BINARY_INV)
-    merge = imgWB[1] + imgCanny
+    if len(frame1) > 0:
+        # Set height
+        frame = changeHeight(frame, HEIGHT)
+        # Merge images
+        imgCanny = cv2.Canny(frame.copy(), int(mean), 255)
+        imgWB = cv2.threshold(frame,int(mean),255,cv2.THRESH_BINARY_INV)
+        merge = imgWB[1] + imgCanny
 
-    newImg = mergeImage(merge, WIDTH, HEIGHT)
+        # Merge hand with mask
+        newImg = mergeImage(merge, WIDTH, HEIGHT)
+        cv2.imwrite('./try2.png', newImg)
+        classified = model.test(newImg)
+        
+        return classified
+    return 'No hay mano'
 
-    # classified = model.test(newImg)
-    
-    return newImg
+

@@ -73,7 +73,9 @@ def readFolder():
             
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             out = crop.editImg(frame)
+            # frame2 = cv2.cvtColor(frame, cv2.COLOR_GRAY2BGR)
             cv2.imshow("out", out)
+            # cv2.imshow("out2", frame2)
             cv2.waitKey(0)
 
 readFolder()

@@ -17,10 +17,10 @@ num_filters3 = 64
 fc_size = 128             # Number of neurons in fully-connected layer.
 
 # Number of color channels for the images: 1 channel for gray-scale.
-num_channels = 3
+num_channels = 1
 
 # image dimensions (only squares for now)
-img_size = 224
+img_size = 334
 
 learning_rate = 0.0001
 

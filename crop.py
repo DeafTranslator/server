@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-# import restoreModel as model
+import restoreModel as model
 
 WIDTH = 334
 HEIGHT = 334
@@ -34,7 +34,7 @@ def cropHand(frame, mean):
 
 def changeHeight(frame, height):
     # Adjusting size
-    if frame.shape[0] is not height:
+    if len(frame.shape) > 0 and frame.shape[0] is not height:
         hy = height / frame.shape[0]
         hx = frame.shape[1] * (hy)
         frame = cv2.resize(frame, (int(hx), int(height)), interpolation = cv2.INTER_CUBIC)
@@ -73,16 +73,16 @@ def editImg(img):
     mean = np.average(median)
     mean *= 1.33
 
-    frame = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Crop hand
-    frame = cropHand(img.copy(), mean)
+    frame = cropHand(img.copy(), 58)
 
-    if len(frame1) > 0:
+    if len(frame) > 0:
         # Set height
         frame = changeHeight(frame, HEIGHT)
         # Merge images
-        imgCanny = cv2.Canny(frame.copy(), int(mean), 255)
-        imgWB = cv2.threshold(frame,int(mean),255,cv2.THRESH_BINARY_INV)
+        imgCanny = cv2.Canny(frame.copy(), 58, 255)
+        imgWB = cv2.threshold(frame,58,255,cv2.THRESH_BINARY_INV)
         merge = imgWB[1] + imgCanny
 
         # Merge hand with mask

@@ -34,7 +34,7 @@ def cropHand(frame, mean):
 
 def changeHeight(frame, height):
     # Adjusting size
-    if len(frame.shape) > 0 and frame.shape[0] is not height:
+    if frame.shape[0] > 0 and frame.shape[1] > 0 and frame.shape[0] is not height:
         hy = height / frame.shape[0]
         hx = frame.shape[1] * (hy)
         frame = cv2.resize(frame, (int(hx), int(height)), interpolation = cv2.INTER_CUBIC)
@@ -72,13 +72,13 @@ def editImg(img):
     median = median.reshape(-1)
     mean = np.average(median)
     mean *= 1.33
-
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    # Crop hand
-    frame = cropHand(img.copy(), 58)
 
-    if len(frame) > 0:
-        # Set height
+    if img.shape[0] > 0 and img.shape[1] > 0:
+        # Crop hand
+        frame = cropHand(img.copy(), 58)
+    if type(frame) is np.ndarray:
+	 # Set height
         frame = changeHeight(frame, HEIGHT)
         # Merge images
         imgCanny = cv2.Canny(frame.copy(), 58, 255)
@@ -87,7 +87,8 @@ def editImg(img):
 
         # Merge hand with mask
         newImg = mergeImage(merge, WIDTH, HEIGHT)
-        cv2.imwrite('./try2.png', newImg)
+        print('Image size ', newImg.shape)
+        #cv2.imwrite('./try2.png', newImg)
         classified = model.test(newImg)
         
         return classified

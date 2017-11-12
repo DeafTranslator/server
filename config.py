@@ -35,9 +35,8 @@ img_shape = (img_size, img_size)
 #num_classes = len(classes)
 
 # class info
-numclasses = ['0','1','2','3','4','5','6','7','8','9']
-#classes = ['y','a','b','c','d','e','f','g','h','i','k','l','m','n','o','r','$
-num_classes = len(numclasses)
+classes = ['y','a','b','c','d','e','f','g','h','i','k','l','m','n','o','r','s','t','u','v','w','x']
+num_classes = len(classes)
 
 #batch size 
 batch_size = 100

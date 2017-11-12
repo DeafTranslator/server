@@ -1,9 +1,9 @@
-import restoreModel as model
+#import restoreModel as model
 import crop
 import socket
 import base64
 import numpy as np
-from PIL import Image
+#from PIL import Image
 import cv2
 
 ipServer = "0.0.0.0"
@@ -22,16 +22,21 @@ while True:
   fh.write(data1)
   fh.close()
   newImage = cv2.imread('./try.png')
-  # image1 = np.frombuffer(data1, dtype = np.uint8)
-  # print("image from buffer", image1.shape)
-  # newImage = cv2.imdecode(image1, cv2.IMREAD_GRAYSCALE)
-  # print("image imdcode", newImage.shape)
+  #image1 = np.frombuffer(data1, dtype = np.uint8)
+  #print("image from buffer", image1.shape)
+  #newImage = cv2.imdecode(image1, cv2.IMREAD_GRAYSCALE)
+  #print("image imdcode", newImage.shape)
   # newImage = cv2.resize(newImage, (400,400), interpolation = cv2.INTER_CUBIC)
   # print("image imdcode", newImage.shape)
 
   if(data1):
     print("message", newImage)
+    #answer = ("ok").encode()
+    #clientSocket.sendto(answer, (addr))
+    #clientSocket.sendto(answer, (addr))
+    #clientSocket.sendto(answer, (addr))
     clientSocket.sendto((crop.editImg(newImage)).encode(), (addr))
+
     print('okk')
-  #   print('okk')
+    #print('okk')
 
